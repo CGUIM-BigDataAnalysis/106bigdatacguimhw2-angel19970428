@@ -12,17 +12,25 @@ author: Yi-Ju Tseng
 
 ## 來台境外生分析
 ### 資料匯入與處理
-```{r dataloadToTWN}
-#這是R Code Chunk
+```{r warning=FALSE,message=FALSE,tidy=TRUE}
+library(readr)
+library(readODS)
+c103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_C.csv")
+c104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_C.csv")
+c105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_C.csv")
+c106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_C.csv")
+s103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_S.csv")
+s104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_S.csv")
+s105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_S.csv")
+s106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_S.csv")
+ods_result<-read_csv("Student_RPT_07.csv")
+head(ods_result)
 ```
 
 ### 哪些國家來台灣唸書的學生最多呢？ 
 ```{r ToTWNCountry}
 #這是R Code Chunk
-head(iris)
-knitr::kable(head(iris))
-library(knitr)
-kable(head(iris))
+
 ```
 
 ### 哪間大學的境外生最多呢？

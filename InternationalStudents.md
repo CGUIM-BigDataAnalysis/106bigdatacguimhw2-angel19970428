@@ -12,50 +12,38 @@ Yi-Ju Tseng
 ### 資料匯入與處理
 
 ``` r
-#這是R Code Chunk
+library(readr)
+library(readODS)
+c103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_C.csv")
+c104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_C.csv")
+c105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_C.csv")
+c106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_C.csv")
+s103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_S.csv")
+s104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_S.csv")
+s105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_S.csv")
+s106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_S.csv")
+ods_result<-read_csv("Student_RPT_07.csv")
+head(ods_result)
 ```
+
+    ## # A tibble: 6 x 15
+    ##   學年度  學期 設立別 學校類別 學校代碼 學校名稱  系所代碼 系所名稱  學制 
+    ##    <int> <int> <chr>  <chr>    <chr>    <chr>        <int> <chr>     <chr>
+    ## 1    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## 2    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## 3    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## 4    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## 5    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## 6    101     1 公立   一般大學 0001     國立政治大學~   220326 土耳其語文學系~ 學士班(~
+    ## # ... with 6 more variables: `對方學校(機構)國別(地區)` <chr>,
+    ## #   `對方學校(機構)中文名稱` <chr>, `對方學校(機構)英文名稱` <chr>,
+    ## #   小計 <int>, 男 <int>, 女 <int>
 
 ### 哪些國家來台灣唸書的學生最多呢？
 
 ``` r
 #這是R Code Chunk
-head(iris)
 ```
-
-    ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    ## 1          5.1         3.5          1.4         0.2  setosa
-    ## 2          4.9         3.0          1.4         0.2  setosa
-    ## 3          4.7         3.2          1.3         0.2  setosa
-    ## 4          4.6         3.1          1.5         0.2  setosa
-    ## 5          5.0         3.6          1.4         0.2  setosa
-    ## 6          5.4         3.9          1.7         0.4  setosa
-
-``` r
-knitr::kable(head(iris))
-```
-
-|  Sepal.Length|  Sepal.Width|  Petal.Length|  Petal.Width| Species |
-|-------------:|------------:|-------------:|------------:|:--------|
-|           5.1|          3.5|           1.4|          0.2| setosa  |
-|           4.9|          3.0|           1.4|          0.2| setosa  |
-|           4.7|          3.2|           1.3|          0.2| setosa  |
-|           4.6|          3.1|           1.5|          0.2| setosa  |
-|           5.0|          3.6|           1.4|          0.2| setosa  |
-|           5.4|          3.9|           1.7|          0.4| setosa  |
-
-``` r
-library(knitr)
-kable(head(iris))
-```
-
-|  Sepal.Length|  Sepal.Width|  Petal.Length|  Petal.Width| Species |
-|-------------:|------------:|-------------:|------------:|:--------|
-|           5.1|          3.5|           1.4|          0.2| setosa  |
-|           4.9|          3.0|           1.4|          0.2| setosa  |
-|           4.7|          3.2|           1.3|          0.2| setosa  |
-|           4.6|          3.1|           1.5|          0.2| setosa  |
-|           5.0|          3.6|           1.4|          0.2| setosa  |
-|           5.4|          3.9|           1.7|          0.4| setosa  |
 
 ### 哪間大學的境外生最多呢？
 

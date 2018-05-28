@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527532261170.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "484108128",
+    "id" : "C97F6D33",
+    "lastKnownWriteTime" : 1527535727,
+    "last_content_update" : 1527535727951,
+    "path" : "~/GitHub/106bigdatacguimhw2-angel19970428/test.R",
+    "project_path" : "test.R",
+    "properties" : {
+        "cursorPosition" : "188,0",
+        "scrollLine" : "183"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
