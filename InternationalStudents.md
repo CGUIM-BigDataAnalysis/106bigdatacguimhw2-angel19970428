@@ -4,7 +4,7 @@
 
 作業完整說明[連結](https://docs.google.com/document/d/1aLGSsGXhgOVgwzSg9JdaNz2qGPQJSoupDAQownkGf_I/edit?usp=sharing)
 
-學習再也不限定在自己出生的國家，台灣每年有許多學生選擇就讀國外的大專院校，同時也有人多國外的學生來台灣就讀，透過分析[大專校院境外學生人數統計](https://data.gov.tw/dataset/6289)、[大專校院本國學生出國進修交流數](https://data.gov.tw/dataset/24730)、[世界各主要國家之我國留學生人數統計表](https://ws.moe.edu.tw/Download.ashx?u=C099358C81D4876CC7586B178A6BD6D5062C39FB76BDE7EC7685C1A3C0846BCDD2B4F4C2FE907C3E7E96F97D24487065577A728C59D4D9A4ECDFF432EA5A114C8B01E4AFECC637696DE4DAECA03BB417&n=4E402A02CE6F0B6C1B3C7E89FDA1FAD0B5DDFA6F3DA74E2DA06AE927F09433CFBC07A1910C169A1845D8EB78BD7D60D7414F74617F2A6B71DC86D17C9DA3781394EF5794EEA7363C&icon=..csv)可以了解103年以後各大專院校國際交流的情形。請同學分析以下議題，並以視覺化的方式呈現分析結果，呈現103年以後大專院校國際交流的情形。
+學習再也不限定在自己出生的國家，台灣每年有許多學生選擇就讀國外的大專院校，同時也有很多國外的學生來台灣就讀，透過分析[大專校院境外學生人數統計](https://data.gov.tw/dataset/6289)、[大專校院本國學生出國進修交流數](https://data.gov.tw/dataset/24730)、[世界各主要國家之我國留學生人數統計表](https://ws.moe.edu.tw/Download.ashx?u=C099358C81D4876CC7586B178A6BD6D5062C39FB76BDE7EC7685C1A3C0846BCDD2B4F4C2FE907C3E7E96F97D24487065577A728C59D4D9A4ECDFF432EA5A114C8B01E4AFECC637696DE4DAECA03BB417&n=4E402A02CE6F0B6C1B3C7E89FDA1FAD0B5DDFA6F3DA74E2DA06AE927F09433CFBC07A1910C169A1845D8EB78BD7D60D7414F74617F2A6B71DC86D17C9DA3781394EF5794EEA7363C&icon=..csv)可以了解103年以後各大專院校國際交流的情形。請同學分析以下議題，並以視覺化的方式呈現分析結果，呈現103年以後大專院校國際交流的情形。
 
 來台境外生分析
 --------------
@@ -188,7 +188,7 @@ chart1<-
   geom_bar(stat = "identity",fill = "cornflowerblue")+
   geom_text(aes(label=result2$總人數),color = "blue", vjust=-1)+
   theme_light()+
-  labs(title="各個國家來台灣唸書的學生人數條狀圖")+
+  labs(title="各個國家來台灣唸書的學生人數條狀圖",y="學生人數")+
   theme(plot.title = element_text(hjust = 0.5))
 chart1
 ```
@@ -342,7 +342,7 @@ chart3<-
   geom_text(aes(label=result5$count),color = "blue", vjust=-1)+
   theme_light()+
   labs(title="台灣大專院校的學生最喜歡去哪些國家進修交流條狀圖",
-       x="對方學校國家")+
+       x="對方學校國家",y="學生人數")+
   theme(plot.title = element_text(hjust = 0.5))
 chart3
 ```
@@ -372,7 +372,7 @@ result6<-
 chart4<-
   country_choropleth(result6)+
   scale_fill_brewer(palette=9,na.value="grey")+
-  labs(title="各個國家來台灣唸書的學生人數面量圖")+
+  labs(title="台灣大專院校的學生最喜歡去哪些國家進修交流面量圖")+
   theme(plot.title = element_text(hjust = 0.5))
 chart4
 ```
@@ -448,9 +448,13 @@ chart5
 
 ### 來台讀書與離台讀書的來源國與留學國趨勢是否相同
 
+![](InternationalStudents_files/figure-markdown_github/unnamed-chunk-16-1.png)![](InternationalStudents_files/figure-markdown_github/unnamed-chunk-16-2.png)
+
+-   我們可以從上面兩張圖，觀察到在來台讀書與離台讀書的來源國與留學國趨勢</br> 1.在北美、歐洲、中國、澳洲四個地理區上，來台讀書和離台讀書的趨勢是差不多的，都相當的多人。</br> 2.在南美洲、非洲、東歐、西亞四個地理區上，來台讀書和離台讀書的趨勢是相差滿大的，幾乎都是來台讀書的人較多，而離台去讀書的人大多都集中在幾個發展較好的國家(例如:俄羅斯、巴西、埃及)，其他的都只有一點點，有些甚至根本沒有。</br> 3.在東南亞上，則能發現其實他們來台讀書的人非常多，但我們離台去讀書的人則相對沒有那麼多。</br>
+
 ### 想來台灣唸書的境外生，他們的母國也有很多台籍生嗎
 
-來台灣唸書的學生的境外生國家前10排行榜
+來台灣唸書的境外生國家前10排行榜
 
 | 國別     | 總人數 | 國別 | 總人數 | 國別 | 總人數 | 國別 | 總人數 | 國別 | 總人數 |
 |:---------|:------:|:-----|:------:|:-----|:------:|:-----|:------:|:-----|:------:|
@@ -458,3 +462,5 @@ chart5
 | 馬來西亞 |  62031 | 日本 |  28200 | 澳門 |  20302 | 南韓 |  16948 | 泰國 |  7035  |
 
 ![](InternationalStudents_files/figure-markdown_github/unnamed-chunk-17-1.png)
+
+-   在來台灣唸書的境外生國家前10排行榜、來台灣唸書境外生母國的台籍生人數條狀圖兩張圖表中</br> 1.我們可以觀察到在來台念書的境外生國家前10排行榜中，其實只有中國、日本、美國、南韓四個國家中是有很多台籍生的，而這四個國家都有個相同點:那就是在發展上都比台灣好，因此我們可以合理的推斷，台灣的學生基本上都是往發展比我們好的國家去留學，不太會往發展比我們落後的國家。</br> 2.另外我們可以看觀察到，其他在來台念書的境外生國家前10排行榜中台籍生較少的國家，大多都是在東南亞地區的國家，並且發展上都沒有相對台灣而言好(香港例外，個人推測可能是因為香港人比較崇尚台灣的自由風氣，所以才都來台灣讀書)，可以再次合理的推斷，台灣的學生都是往發展比我們好的國家去留學。

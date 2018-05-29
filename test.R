@@ -14,7 +14,7 @@ s105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_S.csv")
 s106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_S.csv")
 ods_result<-read_csv("Student_RPT_07.csv")
 world<-read_csv("https://ws.moe.edu.tw/Download.ashx?u=C099358C81D4876CC7586B178A6BD6D5062C39FB76BDE7EC7685C1A3C0846BCDD2B4F4C2FE907C3E7E96F97D24487065577A728C59D4D9A4ECDFF432EA5A114C8B01E4AFECC637696DE4DAECA03BB417&n=4E402A02CE6F0B6C1B3C7E89FDA1FAD0B5DDFA6F3DA74E2DA06AE927F09433CFBC07A1910C169A1845D8EB78BD7D60D7414F74617F2A6B71DC86D17C9DA3781394EF5794EEA7363C&icon=..csv")
-head(ods_result)
+
 ####1.1
 cleandata_c<-function(x){
   y<-
@@ -31,7 +31,6 @@ total_c105<-cleandata_c(c105)
 colnames(total_c105)=c("國別","總人數105")
 total_c106<-cleandata_c(c106)
 colnames(total_c106)=c("國別","總人數106")
-
 total_c<-
   Reduce(function(x, y) merge(x, y, by="國別",all=T),
          list(total_c103, total_c104, total_c105,total_c106))
@@ -205,7 +204,7 @@ result9_2<-result4_1[c(1,15,11,2,29,
 colnames(result9_2)<-c("國別","母國台籍生")
 kable(result9_2)
 result9_2$國別<-factor(as.integer(rownames(result9_2))
-                   ,labels=result9_2$國別)
+                     ,labels=result9_2$國別)
 chart6<-
   ggplot(data=result9_2,
          aes(x=國別,y=母國台籍生))+
