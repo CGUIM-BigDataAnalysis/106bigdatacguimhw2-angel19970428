@@ -3,6 +3,7 @@ library(dplyr)
 library(knitr)
 library(ggplot2)
 library(choroplethr)
+library(choroplethrMaps)
 c103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_C.csv")
 c104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_C.csv")
 c105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_C.csv")
@@ -84,8 +85,7 @@ chart1<-
 chart1
 ###3
 countryname<-read_csv("CountriesComparisionTable.csv")
-colnames(countryname)=c("ISO3","EnglishName","國別")
-result3<-merge(result_c,countryname,by="國別")
+result3<-merge(result_c,countryname,by.x="國別",by.y="Taiwan")
 colnames(result3)<-c("國別","value","ISO3","region")
 ###中國大陸=中國大陸(5)+香港(91)+澳門(159)
 grep("中國大陸",result3$國別)
@@ -99,8 +99,13 @@ result3[107,2]=result3[107,2]+result3[108,2]
 result3<-
   result3%>%
   subset(region!="Unmatch")%>%
-  subset(`國別`!="索馬利蘭共和國")
-chart2<-country_choropleth(result3)
+  subset(`國別`!="索馬利蘭共和國")%>%
+  select(region,value)
+chart2<-
+  country_choropleth(result3)+
+  scale_fill_brewer(palette=9,na.value="grey")+
+  labs(title="各個國家來台灣唸書的學生人數面量圖")+
+  theme(plot.title = element_text(hjust = 0.5))
 chart2
 ###4
 result4_1<-
@@ -163,9 +168,6 @@ result8<-merge(result7,countryname,
 colnames(result8)<-c("國別","洲別","value","ISO3","region")
 chart5<-
   country_choropleth(result8,num_colors=7)
-# +
-#   scale_fill_gradient(
-#     low = "white",high = "steelblue",na.value="white") 
 chart5
 ###9.1
 ###來台人數前10名
@@ -174,17 +176,30 @@ result9_1<-result_c
 ###離台人數前10名
 kable(head(result4_1,10))
 ###9.2
-kable(head(result_c,10))
-grep("中國大陸",result4_1$`對方學校(機構)國別(地區)`)#1
-grep("馬來西亞",result4_1$`對方學校(機構)國別(地區)`)#15
-grep("香港",result4_1$`對方學校(機構)國別(地區)`)#11
-grep("日本",result4_1$`對方學校(機構)國別(地區)`)#2
-grep("越南",result4_1$`對方學校(機構)國別(地區)`)#29,66
-grep("澳門",result4_1$`對方學校(機構)國別(地區)`)#38
-grep("印尼",result4_1$`對方學校(機構)國別(地區)`)#49
-grep("南韓",result4_1$`對方學校(機構)國別(地區)`)#4,14
-grep("美國",result4_1$`對方學校(機構)國別(地區)`)#3
-grep("泰國",result4_1$`對方學校(機構)國別(地區)`)#16,25
+result9_1<-head(result_c,10)
+a<-result9_1$國別[1:2]
+b<-result9_1$總人數[1:2]
+c<-result9_1$國別[3:4]
+d<-result9_1$總人數[3:4]
+e<-result9_1$國別[5:6]
+f<-result9_1$總人數[5:6]
+g<-result9_1$國別[7:8]
+h<-result9_1$總人數[7:8]
+i<-result9_1$國別[9:10]
+j<-result9_1$總人數[9:10]
+result9<-data.frame(a,b,c,d,e,f,g,h,i,j)
+colnames(result9)<-c("國別","總人數","國別","總人數","國別","總人數","國別","總人數","國別","總人數")
+kable(result9)
+# grep("中國大陸",result4_1$`對方學校(機構)國別(地區)`)#1
+# grep("馬來西亞",result4_1$`對方學校(機構)國別(地區)`)#15
+# grep("香港",result4_1$`對方學校(機構)國別(地區)`)#11
+# grep("日本",result4_1$`對方學校(機構)國別(地區)`)#2
+# grep("越南",result4_1$`對方學校(機構)國別(地區)`)#29,66
+# grep("澳門",result4_1$`對方學校(機構)國別(地區)`)#38
+# grep("印尼",result4_1$`對方學校(機構)國別(地區)`)#49
+# grep("南韓",result4_1$`對方學校(機構)國別(地區)`)#4,14
+# grep("美國",result4_1$`對方學校(機構)國別(地區)`)#3
+# grep("泰國",result4_1$`對方學校(機構)國別(地區)`)#16,25
 result9_2<-result4_1[c(1,15,11,2,29,
                        38,49,4,3,16),]
 colnames(result9_2)<-c("國別","母國台籍生")
