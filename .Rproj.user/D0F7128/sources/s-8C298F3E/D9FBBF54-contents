@@ -37,8 +37,8 @@ total_c<-
 result_c<-
   total_c%>%
   mutate(總人數=rowSums(total_c[,2:5],na.rm=T))%>%
-  select(國別,總人數)
-result_c<-result_c[order(result_c$總人數,decreasing=T),]
+  select(國別,總人數)%>%
+  arrange(desc(總人數))
 kable(head(result_c,10))
 ###1.2
 cleandata_s<-function(x){
@@ -62,8 +62,8 @@ total_s<-
 result_s<-
   total_s%>%
   mutate(總人數=rowSums(total_s[,2:5],na.rm=T))%>%
-  select(學校名稱,總人數)
-result_s<-result_s[order(result_s$總人數,decreasing=T),]
+  select(學校名稱,總人數)%>%
+  arrange(desc(總人數))
 kable(head(result_s,10))
 ###2
 sum_other<-sum(result_c[11:nrow(result_c),2])
@@ -163,6 +163,9 @@ result8<-merge(result7,countryname,
 colnames(result8)<-c("國別","洲別","value","ISO3","region")
 chart5<-
   country_choropleth(result8,num_colors=7)
+# +
+#   scale_fill_gradient(
+#     low = "white",high = "steelblue",na.value="white") 
 chart5
 ###9.1
 ###來台人數前10名

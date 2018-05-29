@@ -1,6 +1,6 @@
 106-2 大數據分析方法 作業二
 ================
-Yi-Ju Tseng
+張仁樵
 
 作業完整說明[連結](https://docs.google.com/document/d/1aLGSsGXhgOVgwzSg9JdaNz2qGPQJSoupDAQownkGf_I/edit?usp=sharing)
 
@@ -11,9 +11,26 @@ Yi-Ju Tseng
 
 ### 資料匯入與處理
 
+-   變數說明
+    -   `c103`:103學年大專校院境外學生人數統計（國別CSV檔）
+    -   `c104`:103學年大專校院境外學生人數統計（國別CSV檔）
+    -   `c105`:105學年大專校院境外學生人數統計（國別CSV檔）
+    -   `c106`:106學年大專校院境外學生人數統計（國別CSV檔）
+    -   `s103`:103學年大專校院境外學生人數統計（校別CSV檔）
+    -   `s104`:104學年大專校院境外學生人數統計（校別CSV檔）
+    -   `s105`:105學年大專校院境外學生人數統計（校別CSV檔）
+    -   `s106`:106學年大專校院境外學生人數統計（校別CSV檔）
+    -   `ods_result`:大專校院本國學生出國進修交流數（csv）檔，附檔在同一資料夾的Student\_RPT\_07.csv
+    -   `world`:世界各主要國家之我國留學生人數統計表（csv）檔
+
 ``` r
+#載入package
 library(readr)
-library(readODS)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(choroplethr)
+#資料讀檔
 c103<-read_csv("http://stats.moe.gov.tw/files/detail/103/103_ab103_C.csv")
 c104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_C.csv")
 c105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_C.csv")
@@ -23,6 +40,8 @@ s104<-read_csv("http://stats.moe.gov.tw/files/detail/104/104_ab104_S.csv")
 s105<-read_csv("http://stats.moe.gov.tw/files/detail/105/105_ab105_S.csv")
 s106<-read_csv("http://stats.moe.gov.tw/files/detail/106/106_ab105_S.csv")
 ods_result<-read_csv("Student_RPT_07.csv")
+world<-read_csv("https://ws.moe.edu.tw/Download.ashx?u=C099358C81D4876CC7586B178A6BD6D5062C39FB76BDE7EC7685C1A3C0846BCDD2B4F4C2FE907C3E7E96F97D24487065577A728C59D4D9A4ECDFF432EA5A114C8B01E4AFECC637696DE4DAECA03BB417&n=4E402A02CE6F0B6C1B3C7E89FDA1FAD0B5DDFA6F3DA74E2DA06AE927F09433CFBC07A1910C169A1845D8EB78BD7D60D7414F74617F2A6B71DC86D17C9DA3781394EF5794EEA7363C&icon=..csv")
+#檢查osd轉成的csv讀檔是否成功
 head(ods_result)
 ```
 
@@ -39,23 +58,160 @@ head(ods_result)
     ## #   `對方學校(機構)中文名稱` <chr>, `對方學校(機構)英文名稱` <chr>,
     ## #   小計 <int>, 男 <int>, 女 <int>
 
+### 資料處理(國家別)
+
+-   函式說明
+    -   `cleandata_c`:對來台念書(國別)學生資料進行資料處理
+-   變數說明
+    -   `total_c103`:103年度來台念書(國別)學生的國別、總人數
+    -   `total_c104`:104年度來台念書(國別)學生的國別、總人數
+    -   `total_c105`:105年度來台念書(國別)學生的國別、總人數
+    -   `total_c106`:106年度來台念書(國別)學生的國別、總人數
+    -   `total_c`:合併4個年度資料後的data.frame
+    -   `result_c`:將4個年度總人數加總後的data.frame
+
+``` r
+#定義資料處理(國家別)的function
+cleandata_c<-function(x){
+  y<-
+    x%>%
+    mutate(總人數=rowSums(x[,3:11]))%>%
+    select(國別,總人數)
+  return(y)
+}
+#對所有國家別的csv檔案進行cleandata_c，並重新定義欄位名稱
+total_c103<-cleandata_c(c103)
+colnames(total_c103)=c("國別","總人數103")
+total_c104<-cleandata_c(c104)
+colnames(total_c104)=c("國別","總人數104")
+total_c105<-cleandata_c(c105)
+colnames(total_c105)=c("國別","總人數105")
+total_c106<-cleandata_c(c106)
+colnames(total_c106)=c("國別","總人數106")
+#對4個data.frame進行merge
+total_c<-
+  Reduce(function(x, y) merge(x, y, by="國別",all=T),
+         list(total_c103, total_c104, total_c105,total_c106))
+#加總所有年度的人數成總人數
+result_c<-
+  total_c%>%
+  mutate(總人數=rowSums(total_c[,2:5],na.rm=T))%>%
+  select(國別,總人數)%>%
+  arrange(desc(總人數))
+```
+
 ### 哪些國家來台灣唸書的學生最多呢？
 
 ``` r
-#這是R Code Chunk
+kable(head(result_c,10))
+```
+
+| 國別     | 總人數 |
+|:---------|:------:|
+| 中國大陸 | 152524 |
+| 馬來西亞 |  62031 |
+| 香港     |  31940 |
+| 日本     |  28200 |
+| 越南     |  21670 |
+| 澳門     |  20302 |
+| 印尼     |  19620 |
+| 南韓     |  16948 |
+| 美國     |  14846 |
+| 泰國     |  7035  |
+
+### 資料處理(學校別)
+
+-   函式說明
+    -   `cleandata_s`:對來台念書(學校別)學生資料進行資料處理</br> 備註:刪除非學位生-大陸研修生欄位，這樣就不會有`無法區分校別`的觀察值出現
+-   變數說明
+    -   `total_s103`:103年度來台念書(學校別)學生的國別、總人數
+    -   `total_s104`:104年度來台念書(學校別)學生的國別、總人數
+    -   `total_s105`:105年度來台念書(學校別)學生的國別、總人數
+    -   `total_s106`:106年度來台念書(學校別)學生的國別、總人數
+    -   `total_s`:合併4個年度資料後的data.frame
+    -   `result_s`:將4個年度總人數加總後的data.frame
+
+``` r
+#定義資料處理(學校別)的function
+cleandata_s<-function(x){
+  y<-
+    x%>%
+    mutate(總人數=rowSums(x[,c(4:9,11,12)]))%>%
+    select(學校名稱,總人數)
+  return(y)
+}
+#對所有學校別的csv檔案進行cleandata_s，並重新定義欄位名稱
+total_s103<-cleandata_s(s103)
+colnames(total_s103)=c("學校名稱","總人數103")
+total_s104<-cleandata_s(s104)
+colnames(total_s104)=c("學校名稱","總人數104")
+total_s105<-cleandata_s(s105)
+colnames(total_s105)=c("學校名稱","總人數105")
+total_s106<-cleandata_s(s106)
+colnames(total_s106)=c("學校名稱","總人數106")
+#對4個data.frame進行merge
+total_s<-
+  Reduce(function(x, y) merge(x, y, by="學校名稱",all=T),
+         list(total_s103, total_s104, total_s105,total_s106))
+#加總所有年度的人數成總人數
+result_s<-
+  total_s%>%
+  mutate(總人數=rowSums(total_s[,2:5],na.rm=T))%>%
+  select(學校名稱,總人數)%>%
+  arrange(desc(總人數))
 ```
 
 ### 哪間大學的境外生最多呢？
 
 ``` r
-#這是R Code Chunk
+kable(head(result_s,10))
 ```
+
+| 學校名稱         | 總人數 |
+|:-----------------|:------:|
+| 國立臺灣師範大學 |  22113 |
+| 國立臺灣大學     |  18199 |
+| 中國文化大學     |  16074 |
+| 銘傳大學         |  16057 |
+| 淡江大學         |  13887 |
+| 國立政治大學     |  11626 |
+| 國立成功大學     |  10982 |
+| 輔仁大學         |  9499  |
+| 逢甲大學         |  9474  |
+| 中原大學         |  7662  |
 
 ### 各個國家來台灣唸書的學生人數條狀圖
 
+-   變數說明
+    -   `sum_other`:其他國家(前10名外)的來台灣念書的學生人數(6688)
+    -   `result2`:只有前10名及其他國家來台灣念書學生人數的data.frame
+    -   `orderID`:為條狀圖的X軸排序
+    -   `chart1`:各個國家來台灣唸書的學生人數條狀圖
+
 ``` r
-#這是R Code Chunk
+#處理其他國家(前15名外)
+sum_other<-sum(result_c[11:nrow(result_c),2])
+result2<-
+  result_c%>%
+  rbind(c("其他",sum_other))
+result2$總人數<-as.numeric(result2$總人數)
+result2<-result2[c(1:10,nrow(result2)),]
+orderID<-as.integer(rownames(result2))
+result2$國別<-factor(orderID
+                   ,labels=result2$國別)
+#作圖
+chart1<-
+  ggplot(data=result2,
+         aes(x=國別,y=總人數))+
+  geom_bar(stat = "identity",fill = "cornflowerblue")+
+  geom_text(aes(label=result2$總人數),color = "blue", vjust=-1)+
+  theme_light()+
+  labs(title="各個國家來台灣唸書的學生人數條狀圖")+
+  theme(plot.title = element_text(hjust = 0.5))
+chart1
 ```
+
+![](InternationalStudents_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 ### 各個國家來台灣唸書的學生人數面量圖
 
